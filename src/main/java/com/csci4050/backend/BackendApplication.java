@@ -3,6 +3,10 @@ package com.csci4050.backend;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+/**
+ * The main class for the backend application.
+ * Likely will not need to be modified.
+ */
 @SpringBootApplication
 public class BackendApplication {
 
