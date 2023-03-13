@@ -2,6 +2,7 @@ package com.csci4050.backend.data;
 
 /**
  * The Address class represents a user's address.
+ * Implementator: George Herrmann
  */
 public class Address {
     private String street;

@@ -2,6 +2,7 @@ package com.csci4050.backend.data;
 
 /**
  * The PaymentCard class represents a user's payment card.
+ * Implementator: George Herrmann
  */
 public class PaymentCard {
     private String cardNumber;
