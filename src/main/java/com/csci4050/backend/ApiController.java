@@ -31,7 +31,9 @@ public class ApiController {
      */
     @GetMapping("/api/getUser")
     public @ResponseBody UserProfile getUser(String id) {
-        return new UserProfile("test", "test", "test", "test", "test", UserStatus.ACTIVE);
+        Address temp = new Address("test", "test", "test", "test", "test");
+        PaymentCard card = new PaymentCard("test", "test", "test", "test");
+        return new UserProfile("test", "test", "test", "test", "test", temp, card, UserStatus.ACTIVE);
     }
 
     /**
@@ -42,7 +44,9 @@ public class ApiController {
      */
     @GetMapping("/api/login")
     public @ResponseBody UserProfile login(String email, String password) {
-        return new UserProfile("test", "test", "test", "test", "test", UserStatus.ACTIVE);
+        Address temp = new Address("test", "test", "test", "test", "test");
+        PaymentCard card = new PaymentCard("test", "test", "test", "test");
+        return new UserProfile("test", "test", "test", "test", "test", temp, card, UserStatus.ACTIVE);
     }
 
     /**
@@ -60,7 +64,9 @@ public class ApiController {
      */
     @GetMapping("/api/register")
     public @ResponseBody UserProfile register(String firstname, String lastname, String email, String password) {
-        return new UserProfile("test", "test", "test", "test", "test", UserStatus.ACTIVE);
+        Address temp = new Address("test", "test", "test", "test", "test");
+        PaymentCard card = new PaymentCard("test", "test", "test", "test");
+        return new UserProfile("test", "test", "test", "test", "test", temp, card, UserStatus.ACTIVE);
     }
 
     @GetMapping("/api/getAddress")
@@ -80,7 +86,7 @@ public class ApiController {
      * @return
      */
     @PostMapping("/api/updateName")
-    public String updateName(String firstname, String lastname) {
+    public String updateName(String id, String firstname, String lastname) {
         return "success";
     }
 
@@ -94,7 +100,7 @@ public class ApiController {
      * @return
      */
     @PostMapping("/api/updateAddress")
-    public String updateAddress(String street, String city, String state, String zip, String country) {
+    public String updateAddress(String id, String street, String city, String state, String zip, String country) {
         return "success";
     }
 
@@ -104,7 +110,7 @@ public class ApiController {
      * @return
      */
     @PostMapping("/api/updatePassword")
-    public String updatePassword(String password) {
+    public String updatePassword(String id, String password) {
         return "success";
     }
 

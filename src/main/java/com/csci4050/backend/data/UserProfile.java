@@ -10,6 +10,8 @@ public class UserProfile {
     private String lastname;
     private String email;
     private String password;
+    private Address address;
+    private PaymentCard paymentCard;
     private UserStatus status;
 
     /**
@@ -22,13 +24,15 @@ public class UserProfile {
      * @param address Address of the user.
      * @param paymentCard Payment card of the user.
      */
-    public UserProfile(String id, String firstname, String lastname, String email, String password, UserStatus status) {
+    public UserProfile(String id, String firstname, String lastname, String email, String password, Address address, PaymentCard card, UserStatus status) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
         this.password = password;
         this.status = status;
+        this.address = address;
+        this.paymentCard = card;
     }
 
     /**
@@ -137,5 +141,41 @@ public class UserProfile {
      */
     public void setStatus(UserStatus status) {
         this.status = status;
+    }
+
+    /**
+     * Gets the address of the user.
+     * 
+     * @return Address of the user.
+     */
+    public Address getAddress() {
+        return address;
+    }
+
+    /**
+     * Sets the address of the user.
+     * 
+     * @param address Address of the user.
+     */
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    /**
+     * Gets the payment card of the user.
+     * 
+     * @return Payment card of the user.
+     */
+    public PaymentCard getPaymentCard() {
+        return paymentCard;
+    }
+
+    /**
+     * Sets the payment card of the user.
+     * 
+     * @param paymentCard Payment card of the user.
+     */
+    public void setPaymentCard(PaymentCard paymentCard) {
+        this.paymentCard = paymentCard;
     }
 }
