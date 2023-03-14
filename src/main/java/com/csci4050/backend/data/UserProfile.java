@@ -1,5 +1,7 @@
 package com.csci4050.backend.data;
 
+import java.util.List;
+
 /**
  * An entity class that represents a user profile.
  * Implementator: George Herrmann
@@ -11,8 +13,9 @@ public class UserProfile {
     private String email;
     private String password;
     private Address address;
-    private PaymentCard paymentCard;
+    private List<PaymentCard> paymentCard;
     private UserStatus status;
+    private boolean promotion;
 
     /**
      * Creates a new user profile object.
@@ -24,7 +27,7 @@ public class UserProfile {
      * @param address Address of the user.
      * @param paymentCard Payment card of the user.
      */
-    public UserProfile(String id, String firstname, String lastname, String email, String password, Address address, PaymentCard card, UserStatus status) {
+    public UserProfile(String id, String firstname, String lastname, String email, String password, Address address, List<PaymentCard> card, UserStatus status, boolean promotion) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -33,6 +36,25 @@ public class UserProfile {
         this.status = status;
         this.address = address;
         this.paymentCard = card;
+        this.promotion = promotion;
+    }
+
+    /**
+     * Gets whether or not the user wants to receive promotional emails.
+     * 
+     * @return Whether or not the user wants to receive promotional emails.
+     */
+    public boolean getPromotion() {
+        return promotion;
+    }
+
+    /**
+     * Sets whether or not the user wants to receive promotional emails.
+     * 
+     * @param promotion Whether or not the user wants to receive promotional emails.
+     */
+    public void setPromotion(boolean promotion) {
+        this.promotion = promotion;
     }
 
     /**
@@ -166,7 +188,7 @@ public class UserProfile {
      * 
      * @return Payment card of the user.
      */
-    public PaymentCard getPaymentCard() {
+    public List<PaymentCard> getPaymentCards() {
         return paymentCard;
     }
 
@@ -175,7 +197,7 @@ public class UserProfile {
      * 
      * @param paymentCard Payment card of the user.
      */
-    public void setPaymentCard(PaymentCard paymentCard) {
+    public void setPaymentCard(List<PaymentCard> paymentCard) {
         this.paymentCard = paymentCard;
     }
 }
