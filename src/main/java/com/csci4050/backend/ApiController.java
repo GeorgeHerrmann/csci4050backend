@@ -1,12 +1,17 @@
 package com.csci4050.backend;
 
+import java.util.List;
+
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.csci4050.backend.data.Address;
+import com.csci4050.backend.data.PaymentCard;
 import com.csci4050.backend.data.UserProfile;
+import com.csci4050.backend.data.UserStatus;
 
 /**
  * Primary API controller for the backend.
@@ -26,7 +31,7 @@ public class ApiController {
      */
     @GetMapping("/api/getUser")
     public @ResponseBody UserProfile getUser(String id) {
-        return null;
+        return new UserProfile("test", "test", "test", "test", "test", UserStatus.ACTIVE);
     }
 
     /**
@@ -37,7 +42,7 @@ public class ApiController {
      */
     @GetMapping("/api/login")
     public @ResponseBody UserProfile login(String email, String password) {
-        return null;
+        return new UserProfile("test", "test", "test", "test", "test", UserStatus.ACTIVE);
     }
 
     /**
@@ -54,8 +59,18 @@ public class ApiController {
      * @return
      */
     @GetMapping("/api/register")
-    public @ResponseBody UserProfile register(String firstname, String lastname, String email, String password, String street, String city, String state, String zip, String country) {
-        return null;
+    public @ResponseBody UserProfile register(String firstname, String lastname, String email, String password) {
+        return new UserProfile("test", "test", "test", "test", "test", UserStatus.ACTIVE);
+    }
+
+    @GetMapping("/api/getAddress")
+    public @ResponseBody Address getAddress(String id) {
+        return new Address("test", "test", "test", "test", "test");
+    }
+
+    @GetMapping("/api/getCards")
+    public @ResponseBody List<PaymentCard> getCards(String id) {
+        return List.of(new PaymentCard("test", "test", "test", "test"));
     }
 
     /**
@@ -66,7 +81,7 @@ public class ApiController {
      */
     @PostMapping("/api/updateName")
     public String updateName(String firstname, String lastname) {
-        return null;
+        return "success";
     }
 
     /**
@@ -80,7 +95,7 @@ public class ApiController {
      */
     @PostMapping("/api/updateAddress")
     public String updateAddress(String street, String city, String state, String zip, String country) {
-        return null;
+        return "success";
     }
 
     /**
@@ -90,7 +105,7 @@ public class ApiController {
      */
     @PostMapping("/api/updatePassword")
     public String updatePassword(String password) {
-        return null;
+        return "success";
     }
 
     /**
@@ -104,7 +119,7 @@ public class ApiController {
      */
     @PostMapping("/api/addCard")
     public String addCard(String userId, String cardNumber, String cardName, String cardExpDate, String cardCvv) {
-        return null;
+        return "success";
     }
 
     /**
@@ -115,6 +130,6 @@ public class ApiController {
      */
     @PostMapping("/api/removeCard")
     public String removeCard(String userId, String cardNumber) {
-        return null;
+        return "success";
     }
 }

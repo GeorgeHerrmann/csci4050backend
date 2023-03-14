@@ -35,15 +35,6 @@ public class PaymentCard {
     }
 
     /**
-     * Returns the card number as an integer.
-     * 
-     * @return The card number as an integer.
-     */
-    public int getCardNumberInt() {
-        return Integer.parseInt(cardNumber);
-    }
-
-    /**
      * Returns the card holder's name.
      * 
      * @return The card holder's name.
@@ -68,14 +59,5 @@ public class PaymentCard {
      */
     public String getCvv() {
         return cvv;
-    }
-
-    /**
-     * Returns the CVV as an integer.
-     * 
-     * @return The CVV as an integer.
-     */
-    public int getCvvInt() {
-        return Integer.parseInt(cvv);
     }
 }

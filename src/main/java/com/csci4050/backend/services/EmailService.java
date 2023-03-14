@@ -5,7 +5,7 @@ package com.csci4050.backend.services;
  * this class will be used to send emails to users when they register for an
  * account.
  * 
- * Implementator: Kartikey
+ * Implementator: George
  */
 public class EmailService {
     
