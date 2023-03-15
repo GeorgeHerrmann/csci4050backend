@@ -28,8 +28,10 @@ public class SessionKeyService {
     /**
      * Creates a SessionKeyService, generating a new public and private key pair.
      * All session keys to be verified by this service must have been created by this service.
+     * 
+     * @throws JWTCreationException If the key pair could not be generated.
      */
-    public SessionKeyService() {
+    public SessionKeyService() throws JWTCreationException {
         try {
             KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
             kpg.initialize(2048);
@@ -46,7 +48,7 @@ public class SessionKeyService {
      * Creates a new session key for this service.
      * 
      * @return A new session key.
-     * @throws JWTCreationException If the key pair could not be created.
+     * @throws JWTCreationException If the session key could not be created.
      */
     public String createSessionKey() throws JWTCreationException {
         try {
