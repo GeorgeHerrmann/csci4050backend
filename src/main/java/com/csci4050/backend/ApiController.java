@@ -43,10 +43,8 @@ public class ApiController {
      * @return
      */
     @GetMapping("/api/login")
-    public @ResponseBody UserProfile login(String email, String password) {
-        Address temp = new Address("test", "test", "test", "test", "test");
-        List<PaymentCard> card = List.of(new PaymentCard("test", "test", "test", "test"));
-        return new UserProfile("test", "test", "test", "test", "test", temp, card, UserStatus.ACTIVE, false);
+    public String login(String email, String password) {
+        return "example JWT token";
     }
 
     /**
@@ -63,10 +61,8 @@ public class ApiController {
      * @return
      */
     @GetMapping("/api/register")
-    public @ResponseBody UserProfile register(String firstname, String lastname, String email, String password) {
-        Address temp = new Address("test", "test", "test", "test", "test");
-        List<PaymentCard> card = List.of(new PaymentCard("test", "test", "test", "test"));
-        return new UserProfile("test", "test", "test", "test", "test", temp, card, UserStatus.ACTIVE, false);
+    public String register(String firstname, String lastname, String email, String password) {
+        return "success";
     }
 
     @GetMapping("/api/getAddress")
