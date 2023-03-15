@@ -47,6 +47,11 @@ public class ApiController {
         return "example JWT token";
     }
 
+    @GetMapping("/api/verifySession")
+    public boolean verifySession(String token) {
+        return true;
+    }
+
     /**
      * Registers a new user.
      * @param firstname
