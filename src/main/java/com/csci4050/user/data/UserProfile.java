@@ -1,4 +1,4 @@
-package com.csci4050.backend.data;
+package com.csci4050.user.data;
 
 import java.util.List;
 

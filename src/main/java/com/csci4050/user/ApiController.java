@@ -1,4 +1,4 @@
-package com.csci4050.backend;
+package com.csci4050.user;
 
 import java.util.List;
 
@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.csci4050.backend.data.Address;
-import com.csci4050.backend.data.PaymentCard;
-import com.csci4050.backend.data.UserProfile;
-import com.csci4050.backend.data.UserStatus;
+import com.csci4050.user.data.Address;
+import com.csci4050.user.data.PaymentCard;
+import com.csci4050.user.data.UserProfile;
+import com.csci4050.user.data.UserStatus;
 
 /**
  * Primary API controller for the backend.
