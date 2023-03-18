@@ -1,4 +1,4 @@
-package com.csci4050.user.data;
+package com.csci4050.api.data;
 
 /**
  * The PaymentCard class represents a user's payment card.

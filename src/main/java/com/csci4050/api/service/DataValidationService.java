@@ -1,7 +1,7 @@
-package com.csci4050.user.services;
+package com.csci4050.api.service;
 
-import com.csci4050.user.data.Address;
-import com.csci4050.user.data.PaymentCard;
+import com.csci4050.api.data.Address;
+import com.csci4050.api.data.PaymentCard;
 
 
 /**

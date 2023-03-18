@@ -1,4 +1,4 @@
-package com.csci4050.user.services;
+package com.csci4050.api.service;
 
 /**
  * Create a class which features a basic email service. For Deliverable 6,

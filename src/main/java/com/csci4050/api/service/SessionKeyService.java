@@ -1,4 +1,4 @@
-package com.csci4050.user.services;
+package com.csci4050.api.service;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;

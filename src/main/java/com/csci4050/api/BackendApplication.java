@@ -1,4 +1,4 @@
-package com.csci4050.user;
+package com.csci4050.api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
  * Likely will not need to be modified.
  */
 @SpringBootApplication
-@EnableJpaRepositories(basePackages = "com.csci4050.user.repository") 
 public class BackendApplication {
 
 	public static void main(String[] args) {
