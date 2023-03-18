@@ -25,7 +25,7 @@ public class Payment {
 	
 	@OneToOne(mappedBy = "payment", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
-	private Address address;
+	private PaymentAddress address;
 	
 	@Column(name = "cvv", updatable = false)
 	private int cvv;

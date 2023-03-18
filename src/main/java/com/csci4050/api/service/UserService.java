@@ -9,12 +9,15 @@ import com.csci4050.api.exception.UserUpdateException;
 import com.csci4050.api.model.User;
 import com.csci4050.api.repository.UserRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class UserService {
 
 	@Autowired
 	UserRepository userRepository;
 
+	@Transactional
 	public User createUser(User user) throws UserCreationException {
 		if (userRepository.existsByUsername(user.getUsername())) {
 			throw new UserCreationException("username", user.getUsername());
@@ -30,6 +33,7 @@ public class UserService {
 		return userRepository.save(user);
 	}
 	
+	@Transactional
 	public User updateUser(User user) throws UserNotFoundException, UserUpdateException {
 		if (userRepository.existsByUsername(user.getUsername())) {
 			throw new UserUpdateException("username", user.getUsername());

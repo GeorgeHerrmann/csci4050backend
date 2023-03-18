@@ -16,7 +16,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "payment_address")
-public class Address {
+public class PaymentAddress {
 
 	@Id
 	private Long paymentId;
