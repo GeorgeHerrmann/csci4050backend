@@ -1,7 +1,5 @@
 package com.csci4050.api.service;
 
-import com.csci4050.api.data.Address;
-import com.csci4050.api.data.PaymentCard;
 
 
 /**
@@ -12,13 +10,7 @@ import com.csci4050.api.data.PaymentCard;
  * Implementator: Kartikey
  */
 public class DataValidationService {
-    public boolean isValidAddress(Address address) {
-        throw new UnsupportedOperationException();
-    }
-
-    public boolean isValidCard(PaymentCard card) {
-        throw new UnsupportedOperationException();
-    }
+   
 
     public boolean isValidEmail(String email) {
         throw new UnsupportedOperationException();

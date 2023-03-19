@@ -6,7 +6,9 @@ import org.springframework.stereotype.Service;
 import com.csci4050.api.exception.UserCreationException;
 import com.csci4050.api.exception.UserNotFoundException;
 import com.csci4050.api.exception.UserUpdateException;
+import com.csci4050.api.model.Password;
 import com.csci4050.api.model.User;
+import com.csci4050.api.repository.PasswordRepository;
 import com.csci4050.api.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
@@ -15,7 +17,10 @@ import jakarta.transaction.Transactional;
 public class UserService {
 
 	@Autowired
-	UserRepository userRepository;
+	private UserRepository userRepository;
+	
+	@Autowired
+	private PasswordRepository passwordRepository;
 
 	@Transactional
 	public User createUser(User user) throws UserCreationException {
@@ -51,8 +56,31 @@ public class UserService {
 		
 		return userRepository.save(user);
 		
+	}
+	
+	@Transactional
+	public void deleteUser(Long id) throws UserNotFoundException {
+		if (!userRepository.existsById(id)) {
+			throw new UserNotFoundException(id + "");
+		} 
+		
+		userRepository.deleteById(id);
+	}
+	
+	@Transactional
+	public void updatePassword(Password password) throws UserNotFoundException {
+		if (!userRepository.existsById(password.getUserId())) {
+			throw new UserNotFoundException(password.getUserId() + "");
+		} 
+		passwordRepository.save(password);
 		
 	}
 	
+	public User getUser(String username) throws UserNotFoundException {
+		if (!userRepository.existsByUsername(username)) {
+			throw new UserNotFoundException(username);
+		}
+		return userRepository.findByUsername(username);
+	}
 	
 }

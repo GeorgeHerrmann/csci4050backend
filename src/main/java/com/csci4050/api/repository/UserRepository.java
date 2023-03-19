@@ -11,5 +11,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	public Boolean existsByUsername(String username);
 	public Boolean existsByPhone(String phone);
 	public Boolean existsByEmail(String email);
+	public User findByUsername(String username);
 
 }

@@ -9,10 +9,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
  * Likely will not need to be modified.
  */
 @SpringBootApplication
-public class BackendApplication {
+public class Application {
 
 	public static void main(String[] args) {
-		SpringApplication.run(BackendApplication.class, args);
+		SpringApplication.run(Application.class, args);
 	}
 
 }

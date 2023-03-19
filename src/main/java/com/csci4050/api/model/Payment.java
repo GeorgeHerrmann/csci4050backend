@@ -23,9 +23,7 @@ public class Payment {
 	@Column(name = "id", updatable = false)
 	private Long id;
 	
-	@OneToOne(mappedBy = "payment", cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn
-	private PaymentAddress address;
+	private Address address;
 	
 	@Column(name = "cvv", updatable = false)
 	private int cvv;
@@ -37,9 +35,9 @@ public class Payment {
 	private String name;
 	
 	@Column(name = "user_id", updatable = false)
-	private int userId;
+	private Long userId;
 	
-	@Column(name = "status", updatable = false)
+	@Column(name = "status")
 	private STATUS status;
 	
 	public enum STATUS {
