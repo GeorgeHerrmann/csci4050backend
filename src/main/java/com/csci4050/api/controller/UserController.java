@@ -48,7 +48,6 @@ public class UserController {
     }
 
    
-    
     @PostMapping("/user/{username}")
     public ResponseEntity<User> updateUser(@RequestBody User user) throws UserNotFoundException, UserUpdateException {
         return new ResponseEntity<User>(userService.updateUser(user), HttpStatus.OK);

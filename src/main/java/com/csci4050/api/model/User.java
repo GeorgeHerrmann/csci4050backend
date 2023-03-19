@@ -35,7 +35,7 @@ public class User {
 	@Column(name = "email")
 	private String email;
 
-	@Column(name = "password")
+	@Column(name = "password", updatable = false)
 	private String password;
 
 	@Column(name = "phone")
