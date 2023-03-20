@@ -26,10 +26,10 @@ import com.csci4050.api.service.UserService;
 @RequestMapping(path = {"/api"}, consumes = {"application/json"})
 @CrossOrigin(origins="*")
 public class UserController {
-	@Autowired
-	UserService userService;
     SessionKeyService keyService = new SessionKeyService();
     DataValidationService dataValidationService = new DataValidationService();
+	@Autowired
+	UserService userService;
     
     @GetMapping("/user/{user}")
     public ResponseEntity<User> getUser(@Param(value = "user") String user) throws UserNotFoundException {
