@@ -27,9 +27,9 @@ public class UserController {
 	@Autowired
 	UserService userService;
     
-    @GetMapping("/user/{username}")
-    public ResponseEntity<User> getUser(@Param(value = "username") String username) throws UserNotFoundException {
-    	return new ResponseEntity<User>(userService.getUser(username), HttpStatus.OK);
+    @GetMapping("/user/{user}")
+    public ResponseEntity<User> getUser(@Param(value = "user") String user) throws UserNotFoundException {
+    	return new ResponseEntity<User>(userService.getUser(user), HttpStatus.OK);
     }
 
     @GetMapping("/api/login")

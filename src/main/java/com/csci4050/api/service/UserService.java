@@ -76,11 +76,15 @@ public class UserService {
 		
 	}
 	
-	public User getUser(String username) throws UserNotFoundException {
-		if (!userRepository.existsByUsername(username)) {
-			throw new UserNotFoundException(username);
+	public User getUser(String user) throws UserNotFoundException {
+		if (userRepository.existsByUsername(user)) {
+			return userRepository.findByUsername(user);	
 		}
-		return userRepository.findByUsername(username);
+		if (userRepository.existsByEmail(user)) {
+			return userRepository.findByEmail(user);
+		}
+		throw new UserNotFoundException(user);
+		
 	}
 	
 }
