@@ -12,18 +12,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.csci4050.api.exception.PaymentException;
 import com.csci4050.api.model.Payment;
+import com.csci4050.api.service.DataValidationService;
 import com.csci4050.api.service.PaymentService;
 
 @RestController
 @RequestMapping(path = {"/api/user/{userId}/payment"}, consumes = {"application/json"})
 @CrossOrigin(origins="*")
 public class PaymentController {
-	
+	DataValidationService validationService = new DataValidationService();
 	@Autowired
 	PaymentService paymentService;
 	
 	@DeleteMapping
 	public ResponseEntity<?> deletePayment(@RequestBody Payment payment) throws PaymentException {
+		payment.setCardNumber(validationService.encryptString(payment.getCardNumber()));
 		paymentService.deletePayment(payment);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		
@@ -31,6 +33,7 @@ public class PaymentController {
 	
 	@PostMapping
 	public ResponseEntity<?> addPayment(@RequestBody Payment payment) throws PaymentException {
+		payment.setCardNumber(validationService.encryptString(payment.getCardNumber()));
 		paymentService.addPayment(payment);
 		return new ResponseEntity<>(HttpStatus.OK);
 		

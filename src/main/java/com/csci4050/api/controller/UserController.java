@@ -17,6 +17,8 @@ import com.csci4050.api.exception.UserNotFoundException;
 import com.csci4050.api.exception.UserUpdateException;
 import com.csci4050.api.model.Password;
 import com.csci4050.api.model.User;
+import com.csci4050.api.service.DataValidationService;
+import com.csci4050.api.service.SessionKeyService;
 import com.csci4050.api.service.UserService;
 
 
@@ -26,30 +28,55 @@ import com.csci4050.api.service.UserService;
 public class UserController {
 	@Autowired
 	UserService userService;
+    SessionKeyService keyService = new SessionKeyService();
+    DataValidationService dataValidationService = new DataValidationService();
     
     @GetMapping("/user/{user}")
     public ResponseEntity<User> getUser(@Param(value = "user") String user) throws UserNotFoundException {
-    	return new ResponseEntity<User>(userService.getUser(user), HttpStatus.OK);
+        User pulledUser = userService.getUser(user);
+        pulledUser.setPassword(dataValidationService.decryptString(pulledUser.getPassword()));
+        pulledUser.getPayments().forEach(card -> card.setCardNumber(dataValidationService.decryptString(card.getCardNumber())));
+    	return new ResponseEntity<User>(pulledUser, HttpStatus.OK);
     }
 
-    @GetMapping("/api/login")
-    public String login(String email, String password) {
-        return "example JWT token";
+    @GetMapping("/login")
+    public ResponseEntity<String> login(String email, String password) {
+        try {
+            User user = userService.getUser(email);
+            user.setPassword(dataValidationService.decryptString(user.getPassword()));
+            if (user.getPassword().equals(password)) {
+                return new ResponseEntity<String>(keyService.createSessionKey(), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<String>("Invalid password", HttpStatus.UNAUTHORIZED);
+            }
+        } catch (UserNotFoundException e) {
+            return new ResponseEntity<String>("User not found", HttpStatus.NOT_FOUND);
+        }
     }
 
-    @GetMapping("/api/verifySession")
-    public boolean verifySession(String token) {
-        return true;
+    @GetMapping("/verifySession")
+    public ResponseEntity<Boolean> verifySession(String token) {
+        if (keyService.verifySessionKey(token)) {
+            return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<Boolean>(false, HttpStatus.UNAUTHORIZED);
+        }
     }
 
     @PostMapping(value = "/register")
     public ResponseEntity<?> register(@RequestBody User user) throws UserCreationException {
-        return new ResponseEntity<User>(userService.createUser(user), HttpStatus.CREATED);
+        if (dataValidationService.isValidEmail(user.getEmail())) {
+            user.setPassword(dataValidationService.encryptString(user.getPassword()));
+            return new ResponseEntity<User>(userService.createUser(user), HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<String>("Invalid email", HttpStatus.BAD_REQUEST);
+        }
     }
 
    
     @PostMapping("/user/{username}")
     public ResponseEntity<User> updateUser(@RequestBody User user) throws UserNotFoundException, UserUpdateException {
+        user.setPassword(dataValidationService.encryptString(user.getPassword()));
         return new ResponseEntity<User>(userService.updateUser(user), HttpStatus.OK);
     }
     
@@ -61,6 +88,7 @@ public class UserController {
 
     @PostMapping("/user/{userId}/credentials")
     public ResponseEntity<?> updatePassword(@RequestBody Password password) throws UserNotFoundException {
+        password.setPassword(dataValidationService.encryptString(password.getPassword()));
     	userService.updatePassword(password);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
