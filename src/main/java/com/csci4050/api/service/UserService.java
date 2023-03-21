@@ -41,7 +41,7 @@ public class UserService {
 	@Transactional
 	public User updateUser(User user) throws UserNotFoundException, UserUpdateException {
 		if (!userRepository.existsById(user.getId())) {
-			throw new UserNotFoundException(user.getId());
+			throw new UserNotFoundException(user.getId() + "");
 		} 
 
 		if (userRepository.existsByIdIsNotAndEmail(user.getId(), user.getEmail())) {

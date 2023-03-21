@@ -79,6 +79,7 @@ public class UserController {
 
     @PostMapping("/user/{userId}/credentials")
     public ResponseEntity<?> updatePassword(@RequestBody Password password) throws UserNotFoundException {
+        password.setPassword(dataValidationService.encryptString(password.getPassword()));
     	userService.updatePassword(password);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
