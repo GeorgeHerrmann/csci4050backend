@@ -18,6 +18,7 @@ import com.csci4050.api.exception.UserNotFoundException;
 import com.csci4050.api.exception.UserUpdateException;
 import com.csci4050.api.model.JWTResponse;
 import com.csci4050.api.model.Password;
+import com.csci4050.api.model.UserResponse;
 import com.csci4050.api.model.User;
 import com.csci4050.api.service.DataValidationService;
 import com.csci4050.api.service.EmailService;
@@ -38,14 +39,18 @@ public class UserController {
 	UserService userService;
     
     @GetMapping("/user/{user}")
-    public ResponseEntity<User> getUser(@PathVariable(value = "user") String user) throws UserNotFoundException {
-        User u = userService.getUser(user);
-        u.setPassword(dataValidationService.decryptString(u.getPassword()));
-        u.getPayments().forEach(card ->  {
-            card.setCardNumber(dataValidationService.decryptString(card.getCardNumber()));
-            card.setName(dataValidationService.decryptString(card.getName()));
-        });
-       return new ResponseEntity<User>(u, HttpStatus.OK);
+    public ResponseEntity<?> getUser(@PathVariable(value = "user") String user) throws UserNotFoundException {
+        try {
+            User u = userService.getUser(user);
+            u.setPassword(dataValidationService.decryptString(u.getPassword()));
+            u.getPayments().forEach(card ->  {
+                card.setCardNumber(dataValidationService.decryptString(card.getCardNumber()));
+                card.setName(dataValidationService.decryptString(card.getName()));
+            });
+            return new ResponseEntity<User>(u, HttpStatus.OK);
+        } catch (UserNotFoundException e) {
+            return new ResponseEntity<UserResponse>(new UserResponse("User not found", null), HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/login")
@@ -98,10 +103,14 @@ public class UserController {
     }
 
     @PostMapping("/user/{userId}/credentials")
-    public ResponseEntity<?> updatePassword(@RequestBody Password password) throws UserNotFoundException {
+    public ResponseEntity<UserResponse> updatePassword(@RequestBody Password password) throws UserNotFoundException {
         password.setPassword(dataValidationService.encryptString(password.getPassword()));
-    	userService.updatePassword(password);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        try {
+    	    userService.updatePassword(password);
+        } catch (UserNotFoundException e) {
+            return new ResponseEntity<UserResponse>(new UserResponse("User does not exist", null), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<UserResponse>(new UserResponse("Success", null), HttpStatus.OK);
     }
 
 }
