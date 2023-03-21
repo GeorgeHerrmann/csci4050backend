@@ -1,5 +1,7 @@
 package com.csci4050.api.controller;
 
+import java.util.Random;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -83,8 +85,6 @@ public class UserController {
     @PostMapping(value = "/register")
     public ResponseEntity<?> register(@RequestBody User user) throws UserCreationException {
         if (dataValidationService.isValidEmail(user.getEmail())) {
-            emailService.sendEmail(user.getEmail(), "Welcome to Cine City", "Thank you for registering with Cine City!" +
-                    " Your email has been verified and your account has been created, you can now log in.");
             user.setPassword(dataValidationService.encryptString(user.getPassword()));
             return new ResponseEntity<User>(userService.createUser(user), HttpStatus.CREATED);
         } else {
@@ -133,6 +133,15 @@ public class UserController {
         "You have requested a password reset, please click the link below to reset your password. \n" +
         "http://localhost:3000/resetpassword");
         return new ResponseEntity<UserResponse>(new UserResponse("Success", null), HttpStatus.OK);
+    }
+
+    @PostMapping("/confirmemail")
+    public ResponseEntity<UserResponse> confirmEmail(@RequestParam String email) {
+        Random rand = new Random();
+        String code = String.format("%04d", rand.nextInt(10000));
+        emailService.sendEmail(email, "Cine City Email Confirmation",
+        "Thanks for registering an account! Please enter the code: " + code + " on the page to create your account.");
+        return new ResponseEntity<UserResponse>(new UserResponse(code, null), HttpStatus.OK);
     }
 
 }
