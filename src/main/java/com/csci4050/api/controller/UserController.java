@@ -24,6 +24,8 @@ import com.csci4050.api.service.DataValidationService;
 import com.csci4050.api.service.EmailService;
 import com.csci4050.api.service.SessionKeyService;
 import com.csci4050.api.service.UserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 @RestController
@@ -93,7 +95,15 @@ public class UserController {
    
     @PostMapping("/user/{username}")
     public ResponseEntity<User> updateUser(@RequestBody User user) throws UserNotFoundException, UserUpdateException {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            System.out.println(mapper.writeValueAsString(user));
+        } catch (JsonProcessingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         user.setPassword(dataValidationService.encryptString(user.getPassword()));
+        user.setId(userService.getUser(user.getEmail()).getId());
         emailService.sendEmail(user.getEmail(), "Cine City Account Update", "Your account has been updated, if you did not make this change please contact us immediately.");
         return new ResponseEntity<User>(userService.updateUser(user), HttpStatus.OK);
     }

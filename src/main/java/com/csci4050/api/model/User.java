@@ -59,7 +59,7 @@ public class User {
 	private Address address;
 
 	public enum STATUS {
-		PENDING
+		PENDING, ACTIVE, INACTIVE
 	}
 
 	public enum TYPE {
