@@ -34,7 +34,7 @@ public class DataValidationService {
 
     }
 
-    String key = "sfknjowhfionqkfxw";
+    String key = "sfknjowhfionqkfx";
 
     /**
      * Encrypts a string using a hashing algorithm.
