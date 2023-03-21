@@ -34,7 +34,7 @@ public class DataValidationService {
 
     }
 
-    String key = "sfknjowhfionqkfwnklqk";
+    String key = "sfknjowhfionqkfxw";
 
     /**
      * Encrypts a string using a hashing algorithm.
@@ -57,7 +57,8 @@ public class DataValidationService {
 
             return encryptedString;
         } catch (Exception e) {
-            throw new Error(e.getMessage());
+            e.printStackTrace();
+            return new String("Hello");
         }
     }
 
