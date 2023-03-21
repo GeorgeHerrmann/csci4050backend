@@ -1,7 +1,6 @@
 package com.csci4050.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -11,14 +10,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.csci4050.api.exception.UserCreationException;
 import com.csci4050.api.exception.UserNotFoundException;
 import com.csci4050.api.exception.UserUpdateException;
+import com.csci4050.api.model.JWTResponse;
 import com.csci4050.api.model.Password;
 import com.csci4050.api.model.User;
 import com.csci4050.api.service.DataValidationService;
+import com.csci4050.api.service.EmailService;
 import com.csci4050.api.service.SessionKeyService;
 import com.csci4050.api.service.UserService;
 
@@ -29,27 +31,35 @@ import com.csci4050.api.service.UserService;
 public class UserController {
     SessionKeyService keyService = new SessionKeyService();
     DataValidationService dataValidationService = new DataValidationService();
+
+    @Autowired
+    EmailService emailService;
 	@Autowired
 	UserService userService;
     
     @GetMapping("/user/{user}")
     public ResponseEntity<User> getUser(@PathVariable(value = "user") String user) throws UserNotFoundException {
-       return new ResponseEntity<User>(userService.getUser(user), HttpStatus.OK);
+        User u = userService.getUser(user);
+        u.setPassword(dataValidationService.decryptString(u.getPassword()));
+       return new ResponseEntity<User>(u, HttpStatus.OK);
     }
 
     @GetMapping("/login")
-    public ResponseEntity<String> login(String email, String password) throws UserNotFoundException {
+    public ResponseEntity<JWTResponse> login(@RequestParam String email, String password) throws UserNotFoundException {
             User user = userService.getUser(email);
+            user.setPassword(dataValidationService.decryptString(user.getPassword()));
+            //emailService.sendEmail("gvhmann@gmail.com", "test email", "test body");
             if (user.getPassword().equals(password)) {
-                return new ResponseEntity<String>(keyService.createSessionKey(), HttpStatus.OK);
+                String key = keyService.createSessionKey();
+                return new ResponseEntity<JWTResponse>(new JWTResponse(key, "true", user), HttpStatus.OK);
             } else {
-                return new ResponseEntity<String>("Invalid password", HttpStatus.UNAUTHORIZED);
+                return new ResponseEntity<JWTResponse>(new JWTResponse("", "false", null), HttpStatus.UNAUTHORIZED);
             }
     }
 
     @GetMapping("/verifySession")
     public ResponseEntity<Boolean> verifySession(String token) {
-        if (keyService.verifySessionKey(token)) {
+        if (!token.isEmpty() && keyService.verifySessionKey(token)) {
             return new ResponseEntity<Boolean>(true, HttpStatus.OK);
         } else {
             return new ResponseEntity<Boolean>(false, HttpStatus.UNAUTHORIZED);
@@ -59,6 +69,7 @@ public class UserController {
     @PostMapping(value = "/register")
     public ResponseEntity<?> register(@RequestBody User user) throws UserCreationException {
         if (dataValidationService.isValidEmail(user.getEmail())) {
+            user.setPassword(dataValidationService.encryptString(user.getPassword()));
             return new ResponseEntity<User>(userService.createUser(user), HttpStatus.CREATED);
         } else {
             return new ResponseEntity<String>("Invalid email", HttpStatus.BAD_REQUEST);
@@ -68,6 +79,7 @@ public class UserController {
    
     @PostMapping("/user/{username}")
     public ResponseEntity<User> updateUser(@RequestBody User user) throws UserNotFoundException, UserUpdateException {
+        user.setPassword(dataValidationService.encryptString(user.getPassword()));
         return new ResponseEntity<User>(userService.updateUser(user), HttpStatus.OK);
     }
     
