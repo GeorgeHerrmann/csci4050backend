@@ -40,9 +40,19 @@ public class UserService {
 	
 	@Transactional
 	public User updateUser(User user) throws UserNotFoundException, UserUpdateException {
-		if (!userRepository.existsByUsername(user.getUsername())) {
-			throw new UserNotFoundException(user.getUsername());
+		if (!userRepository.existsById(user.getId())) {
+			throw new UserNotFoundException(user.getId());
 		} 
+
+		if (userRepository.existsByIdIsNotAndEmail(user.getId(), user.getEmail())) {
+			throw new UserUpdateException("email", user.getEmail());
+		}
+		if (userRepository.existsByIdIsNotAndUsername(user.getId(), user.getUsername())) {
+			throw new UserUpdateException("username", user.getUsername());
+		}
+		if (userRepository.existsByIdIsNotAndPhone(user.getId(), user.getPhone())) {
+			throw new UserUpdateException("phone", user.getPhone());
+		}
 		
 		return userRepository.save(user);
 		

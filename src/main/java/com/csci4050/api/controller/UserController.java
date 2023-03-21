@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,26 +33,18 @@ public class UserController {
 	UserService userService;
     
     @GetMapping("/user/{user}")
-    public ResponseEntity<User> getUser(@Param(value = "user") String user) throws UserNotFoundException {
-        User pulledUser = userService.getUser(user);
-        pulledUser.setPassword(dataValidationService.decryptString(pulledUser.getPassword()));
-        pulledUser.getPayments().forEach(card -> card.setCardNumber(dataValidationService.decryptString(card.getCardNumber())));
-    	return new ResponseEntity<User>(pulledUser, HttpStatus.OK);
+    public ResponseEntity<User> getUser(@PathVariable(value = "user") String user) throws UserNotFoundException {
+       return new ResponseEntity<User>(userService.getUser(user), HttpStatus.OK);
     }
 
     @GetMapping("/login")
-    public ResponseEntity<String> login(String email, String password) {
-        try {
+    public ResponseEntity<String> login(String email, String password) throws UserNotFoundException {
             User user = userService.getUser(email);
-            user.setPassword(dataValidationService.decryptString(user.getPassword()));
             if (user.getPassword().equals(password)) {
                 return new ResponseEntity<String>(keyService.createSessionKey(), HttpStatus.OK);
             } else {
                 return new ResponseEntity<String>("Invalid password", HttpStatus.UNAUTHORIZED);
             }
-        } catch (UserNotFoundException e) {
-            return new ResponseEntity<String>("User not found", HttpStatus.NOT_FOUND);
-        }
     }
 
     @GetMapping("/verifySession")
@@ -66,7 +59,6 @@ public class UserController {
     @PostMapping(value = "/register")
     public ResponseEntity<?> register(@RequestBody User user) throws UserCreationException {
         if (dataValidationService.isValidEmail(user.getEmail())) {
-            user.setPassword(dataValidationService.encryptString(user.getPassword()));
             return new ResponseEntity<User>(userService.createUser(user), HttpStatus.CREATED);
         } else {
             return new ResponseEntity<String>("Invalid email", HttpStatus.BAD_REQUEST);
@@ -76,19 +68,17 @@ public class UserController {
    
     @PostMapping("/user/{username}")
     public ResponseEntity<User> updateUser(@RequestBody User user) throws UserNotFoundException, UserUpdateException {
-        user.setPassword(dataValidationService.encryptString(user.getPassword()));
         return new ResponseEntity<User>(userService.updateUser(user), HttpStatus.OK);
     }
     
     @DeleteMapping("user/{userId}")
-    public ResponseEntity<?> deleteUser(@Param(value = "userId") Long userId) throws UserNotFoundException {
+    public ResponseEntity<?> deleteUser(@PathVariable(value = "userId") Long userId) throws UserNotFoundException {
     	userService.deleteUser(userId);
         return new ResponseEntity<User>(HttpStatus.NO_CONTENT);
     }
 
     @PostMapping("/user/{userId}/credentials")
     public ResponseEntity<?> updatePassword(@RequestBody Password password) throws UserNotFoundException {
-        password.setPassword(dataValidationService.encryptString(password.getPassword()));
     	userService.updatePassword(password);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
