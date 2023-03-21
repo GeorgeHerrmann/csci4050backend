@@ -117,4 +117,12 @@ public class UserController {
         return new ResponseEntity<UserResponse>(new UserResponse("Success", null), HttpStatus.OK);
     }
 
+    @PostMapping("/user/{email}/forgot")
+    public ResponseEntity<UserResponse> forgotPassword(@RequestParam String email) {
+        emailService.sendEmail(email, "Cine City Password Reset",
+        "You have requested a password reset, please click the link below to reset your password. \n" +
+        "http://localhost:3000/resetpassword");
+        return new ResponseEntity<UserResponse>(new UserResponse("Success", null), HttpStatus.OK);
+    }
+
 }
