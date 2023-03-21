@@ -11,4 +11,6 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
 	public Boolean existsByIdAndUserIdAndCardNumber(Long id, Long userId, String cardNumber);
 
 	public Boolean existsByUserId(Long userId);
+	
+	public Long countByUserId(Long userId);
 }

@@ -23,7 +23,7 @@ public class Payment {
 	private Address address;
 	
 	@Column(name = "cvv", updatable = false)
-	private int cvv;
+	private String cvv;
 	
 	@Column(name = "card_number", updatable = false)
 	private String cardNumber;
@@ -34,8 +34,13 @@ public class Payment {
 	@Column(name = "user_id", updatable = false)
 	private Long userId;
 	
+	@Column(name = "expiration")
+	private String expiration;
+	
 	@Column(name = "status")
 	private STATUS status;
+	
+
 	
 	public enum STATUS {
 		PENDING

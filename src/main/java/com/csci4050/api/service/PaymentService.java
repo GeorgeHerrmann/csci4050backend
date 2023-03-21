@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.csci4050.api.exception.PaymentException;
 import com.csci4050.api.model.Payment;
 import com.csci4050.api.repository.PaymentRepository;
+import com.csci4050.api.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -15,6 +16,8 @@ public class PaymentService {
 	@Autowired
 	private PaymentRepository paymentRepository;
 	
+	@Autowired
+	private UserRepository userRepository;
 	
 	@Transactional
 	public void deletePayment(Payment payment) throws PaymentException {
@@ -26,8 +29,12 @@ public class PaymentService {
 	
 	@Transactional
 	public void addPayment(Payment payment) throws PaymentException {
-		if (paymentRepository.existsByUserId(payment.getUserId())) {
+		if (!userRepository.existsById(payment.getUserId())) {
 			throw new PaymentException("Payment could not be created as user does not exists");
+		}
+		
+		if (paymentRepository.countByUserId(payment.getUserId()) >= 3) {
+			throw new PaymentException("User has has added the maximum number of cards to for this account.");
 		}
 		paymentRepository.save(payment);
 	}
