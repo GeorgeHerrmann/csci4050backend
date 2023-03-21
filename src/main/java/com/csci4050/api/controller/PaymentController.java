@@ -34,6 +34,7 @@ public class PaymentController {
 	@PostMapping
 	public ResponseEntity<?> addPayment(@RequestBody Payment payment) throws PaymentException {
 		payment.setCardNumber(validationService.encryptString(payment.getCardNumber()));
+		payment.setName(validationService.encryptString(payment.getName()));
 		paymentService.addPayment(payment);
 		return new ResponseEntity<>(HttpStatus.OK);
 		

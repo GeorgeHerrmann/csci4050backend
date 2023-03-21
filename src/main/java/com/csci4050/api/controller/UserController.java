@@ -41,6 +41,10 @@ public class UserController {
     public ResponseEntity<User> getUser(@PathVariable(value = "user") String user) throws UserNotFoundException {
         User u = userService.getUser(user);
         u.setPassword(dataValidationService.decryptString(u.getPassword()));
+        u.getPayments().forEach(card ->  {
+            card.setCardNumber(dataValidationService.decryptString(card.getCardNumber()));
+            card.setName(dataValidationService.decryptString(card.getName()));
+        });
        return new ResponseEntity<User>(u, HttpStatus.OK);
     }
 
@@ -48,6 +52,10 @@ public class UserController {
     public ResponseEntity<JWTResponse> login(@RequestParam String email, String password) throws UserNotFoundException {
             User user = userService.getUser(email);
             user.setPassword(dataValidationService.decryptString(user.getPassword()));
+            user.getPayments().forEach(card ->  {
+                card.setCardNumber(dataValidationService.decryptString(card.getCardNumber()));
+                card.setName(dataValidationService.decryptString(card.getName()));
+            });
             //emailService.sendEmail("gvhmann@gmail.com", "test email", "test body");
             if (user.getPassword().equals(password)) {
                 String key = keyService.createSessionKey();
