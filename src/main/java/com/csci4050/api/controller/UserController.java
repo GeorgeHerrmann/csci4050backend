@@ -61,7 +61,6 @@ public class UserController {
                 card.setCardNumber(dataValidationService.decryptString(card.getCardNumber()));
                 card.setName(dataValidationService.decryptString(card.getName()));
             });
-            //emailService.sendEmail("gvhmann@gmail.com", "test email", "test body");
             if (user.getPassword().equals(password)) {
                 String key = keyService.createSessionKey();
                 return new ResponseEntity<JWTResponse>(new JWTResponse(key, "true", user), HttpStatus.OK);
@@ -82,6 +81,8 @@ public class UserController {
     @PostMapping(value = "/register")
     public ResponseEntity<?> register(@RequestBody User user) throws UserCreationException {
         if (dataValidationService.isValidEmail(user.getEmail())) {
+            emailService.sendEmail(user.getEmail(), "Welcome to Cine City", "Thank you for registering with Cine City!" +
+                    " Your email has been verified and your account has been created, you can now log in.");
             user.setPassword(dataValidationService.encryptString(user.getPassword()));
             return new ResponseEntity<User>(userService.createUser(user), HttpStatus.CREATED);
         } else {
@@ -93,6 +94,7 @@ public class UserController {
     @PostMapping("/user/{username}")
     public ResponseEntity<User> updateUser(@RequestBody User user) throws UserNotFoundException, UserUpdateException {
         user.setPassword(dataValidationService.encryptString(user.getPassword()));
+        emailService.sendEmail(user.getEmail(), "Cine City Account Update", "Your account has been updated, if you did not make this change please contact us immediately.");
         return new ResponseEntity<User>(userService.updateUser(user), HttpStatus.OK);
     }
     
@@ -103,10 +105,12 @@ public class UserController {
     }
 
     @PostMapping("/user/{userId}/credentials")
-    public ResponseEntity<UserResponse> updatePassword(@RequestBody Password password) throws UserNotFoundException {
+    public ResponseEntity<UserResponse> updatePassword(@RequestBody Password password, @RequestParam String email) throws UserNotFoundException {
         password.setPassword(dataValidationService.encryptString(password.getPassword()));
         try {
     	    userService.updatePassword(password);
+            System.out.println(email);
+            emailService.sendEmail(email, "Cine City Password Update", "Your password has been updated, if you did not make this change please contact us immediately.");
         } catch (UserNotFoundException e) {
             return new ResponseEntity<UserResponse>(new UserResponse("User does not exist", null), HttpStatus.BAD_REQUEST);
         }
