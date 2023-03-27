@@ -21,9 +21,14 @@ public class UserService {
 	
 	@Autowired
 	private PasswordRepository passwordRepository;
+	
+	DataValidationService dataValidationService = new DataValidationService();
 
 	@Transactional
 	public User createUser(User user) throws UserCreationException {
+		if (!dataValidationService.isValidEmail(user.getEmail())) {
+            throw new UserCreationException("Invalid email");
+        }
 		if (userRepository.existsByUsername(user.getUsername())) {
 			throw new UserCreationException("username", user.getUsername());
 		}
@@ -34,7 +39,7 @@ public class UserService {
 		if (userRepository.existsByPhone(user.getPhone())) {
 			throw new UserCreationException("phone", user.getPhone());
 		}
-			
+		user.setPassword(dataValidationService.encryptString(user.getPassword()));
 		return userRepository.save(user);
 	}
 	
@@ -53,7 +58,7 @@ public class UserService {
 		if (userRepository.existsByIdIsNotAndPhone(user.getId(), user.getPhone())) {
 			throw new UserUpdateException("phone", user.getPhone());
 		}
-		
+		dataValidationService.encryptString(user.getPassword());
 		return userRepository.save(user);
 		
 	}
@@ -72,10 +77,12 @@ public class UserService {
 		if (!userRepository.existsById(password.getUserId())) {
 			throw new UserNotFoundException(password.getUserId() + "");
 		} 
+		password.setPassword(dataValidationService.encryptString(password.getPassword()));
 		passwordRepository.save(password);
 		
 	}
 	
+	@Transactional
 	public User getUser(String user) throws UserNotFoundException {
 		if (userRepository.existsByUsername(user)) {
 			return userRepository.findByUsername(user);	

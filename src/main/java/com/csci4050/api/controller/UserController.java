@@ -1,7 +1,5 @@
 package com.csci4050.api.controller;
 
-import java.util.Random;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,14 +18,11 @@ import com.csci4050.api.exception.UserNotFoundException;
 import com.csci4050.api.exception.UserUpdateException;
 import com.csci4050.api.model.JWTResponse;
 import com.csci4050.api.model.Password;
-import com.csci4050.api.model.UserResponse;
 import com.csci4050.api.model.User;
 import com.csci4050.api.service.DataValidationService;
 import com.csci4050.api.service.EmailService;
 import com.csci4050.api.service.SessionKeyService;
 import com.csci4050.api.service.UserService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 @RestController
@@ -44,17 +39,12 @@ public class UserController {
     
     @GetMapping("/user/{user}")
     public ResponseEntity<?> getUser(@PathVariable(value = "user") String user) throws UserNotFoundException {
-        try {
             User u = userService.getUser(user);
-            u.setPassword(dataValidationService.decryptString(u.getPassword()));
             u.getPayments().forEach(card ->  {
                 card.setCardNumber(dataValidationService.decryptString(card.getCardNumber()));
                 card.setName(dataValidationService.decryptString(card.getName()));
             });
             return new ResponseEntity<User>(u, HttpStatus.OK);
-        } catch (UserNotFoundException e) {
-            return new ResponseEntity<UserResponse>(new UserResponse("User not found", null), HttpStatus.NOT_FOUND);
-        }
     }
 
     @GetMapping("/login")
@@ -84,27 +74,14 @@ public class UserController {
 
     @PostMapping(value = "/register")
     public ResponseEntity<?> register(@RequestBody User user) throws UserCreationException {
-        if (dataValidationService.isValidEmail(user.getEmail())) {
-            user.setPassword(dataValidationService.encryptString(user.getPassword()));
-            return new ResponseEntity<User>(userService.createUser(user), HttpStatus.CREATED);
-        } else {
-            return new ResponseEntity<String>("Invalid email", HttpStatus.BAD_REQUEST);
-        }
+    	return new ResponseEntity<User>(userService.createUser(user), HttpStatus.CREATED);
     }
 
    
     @PostMapping("/user/{username}")
     public ResponseEntity<User> updateUser(@RequestBody User user) throws UserNotFoundException, UserUpdateException {
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            System.out.println(mapper.writeValueAsString(user));
-        } catch (JsonProcessingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        user.setPassword(dataValidationService.encryptString(user.getPassword()));
-        user.setId(userService.getUser(user.getEmail()).getId());
-        emailService.sendEmail(user.getEmail(), "Cine City Account Update", "Your account has been updated, if you did not make this change please contact us immediately.");
+        userService.updateUser(user);
+        emailService.updateUser(user.getEmail());
         return new ResponseEntity<User>(userService.updateUser(user), HttpStatus.OK);
     }
     
@@ -115,33 +92,22 @@ public class UserController {
     }
 
     @PostMapping("/user/{userId}/credentials")
-    public ResponseEntity<UserResponse> updatePassword(@RequestBody Password password, @RequestParam String email) throws UserNotFoundException {
-        password.setPassword(dataValidationService.encryptString(password.getPassword()));
-        try {
-    	    userService.updatePassword(password);
-            System.out.println(email);
-            emailService.sendEmail(email, "Cine City Password Update", "Your password has been updated, if you did not make this change please contact us immediately.");
-        } catch (UserNotFoundException e) {
-            return new ResponseEntity<UserResponse>(new UserResponse("User does not exist", null), HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity<UserResponse>(new UserResponse("Success", null), HttpStatus.OK);
+    public ResponseEntity<?> updatePassword(@RequestBody Password password, @RequestParam String email) throws UserNotFoundException {
+	    userService.updatePassword(password);
+        emailService.updatePassword(email);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PostMapping("/user/{email}/forgot")
-    public ResponseEntity<UserResponse> forgotPassword(@RequestParam String email) {
-        emailService.sendEmail(email, "Cine City Password Reset",
-        "You have requested a password reset, please click the link below to reset your password. \n" +
-        "http://localhost:3000/resetpassword");
-        return new ResponseEntity<UserResponse>(new UserResponse("Success", null), HttpStatus.OK);
+    public ResponseEntity<?> forgotPassword(@RequestParam String email) {
+        emailService.resetPassword(email);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PostMapping("/confirmemail")
-    public ResponseEntity<UserResponse> confirmEmail(@RequestParam String email) {
-        Random rand = new Random();
-        String code = String.format("%04d", rand.nextInt(10000));
-        emailService.sendEmail(email, "Cine City Email Confirmation",
-        "Thanks for registering an account! Please enter the code: " + code + " on the page to create your account.");
-        return new ResponseEntity<UserResponse>(new UserResponse(code, null), HttpStatus.OK);
+    public ResponseEntity<?> confirmEmail(@RequestParam String email) {
+        emailService.confirmEmail(email);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }

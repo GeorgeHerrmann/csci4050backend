@@ -7,4 +7,7 @@ public class UserCreationException extends Exception {
 		super("Could Not Create User: The " + field + " " + value + " is associated with another account");
 	}
 
+	public UserCreationException(String message) {
+		super(message);
+	}
 }

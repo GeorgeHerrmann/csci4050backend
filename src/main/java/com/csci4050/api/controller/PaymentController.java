@@ -12,10 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.csci4050.api.exception.PaymentException;
 import com.csci4050.api.model.Payment;
-import com.csci4050.api.model.UserResponse;
 import com.csci4050.api.service.DataValidationService;
 import com.csci4050.api.service.PaymentService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 @RequestMapping(path = {"/api/user/{userId}/payment"}, consumes = {"application/json"})
@@ -26,23 +24,19 @@ public class PaymentController {
 	PaymentService paymentService;
 	
 	@DeleteMapping("/delete")
-	public ResponseEntity<UserResponse> deletePayment(@RequestBody Payment payment) throws PaymentException {
+	public ResponseEntity<?> deletePayment(@RequestBody Payment payment) throws PaymentException {
 		payment.setCardNumber(validationService.encryptString(payment.getCardNumber()));
 		paymentService.deletePayment(payment);
-		return new ResponseEntity<>(new UserResponse("Success", null), HttpStatus.NO_CONTENT);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		
 	}
 	
 	@PostMapping("/add")
-	public ResponseEntity<UserResponse> addPayment(@RequestBody Payment payment) throws PaymentException {
+	public ResponseEntity<?> addPayment(@RequestBody Payment payment) throws PaymentException {
 		payment.setCardNumber(validationService.encryptString(payment.getCardNumber()));
 		payment.setName(validationService.encryptString(payment.getName()));
-		try {
-			paymentService.addPayment(payment);
-		} catch (PaymentException e) {
-			return new ResponseEntity<>(new UserResponse("Failure", null), HttpStatus.CONFLICT);
-		}
-		return new ResponseEntity<>(new UserResponse("Success", null), HttpStatus.OK);
+		paymentService.addPayment(payment);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		
 	}
 
