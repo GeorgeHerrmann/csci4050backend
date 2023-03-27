@@ -3,6 +3,7 @@ package com.csci4050.api.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.csci4050.api.exception.TheatreNotFoundException;
 import com.csci4050.api.model.ShowRoom;
 import com.csci4050.api.model.Theatre;
 import com.csci4050.api.repository.ShowRoomRepository;
@@ -25,7 +26,20 @@ public class TheatreService {
 	}
 	
 	@Transactional
+	public void deleteTheatre(Long id) throws TheatreNotFoundException {
+		if (!theatreRepository.existsById(id)) {
+			throw new TheatreNotFoundException(id);
+		}
+		theatreRepository.deleteById(id);
+	}
+	
+	@Transactional
 	public ShowRoom addShowRoom(ShowRoom showRoom) {
+		return showRoomRepository.save(showRoom);
+	}
+	
+	@Transactional
+	public ShowRoom deleteShowRoom(ShowRoom showRoom) {
 		return showRoomRepository.save(showRoom);
 	}
 }

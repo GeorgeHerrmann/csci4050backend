@@ -3,6 +3,8 @@ package com.csci4050.api.controller;
 import java.time.Instant;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.csci4050.api.exception.ShowCreationException;
+import com.csci4050.api.exception.ShowNotFoundException;
 import com.csci4050.api.model.Show;
 import com.csci4050.api.service.ShowService;
 
@@ -23,30 +27,32 @@ public class ShowController {
 	ShowService showService;
 	
 	 @PostMapping(value = "/show")
-	 public void createShow(@RequestBody Show show) {
-		 showService.addShow(show);
+	 public ResponseEntity<?> createShow(@RequestBody Show show) throws ShowCreationException {
+		 return new ResponseEntity<>(showService.addShow(show), HttpStatus.CREATED);
+		 
 	 }
 	 
 	 @PostMapping(value = "/show/{showId}")
-	 public void updateShow(@RequestBody Show show) {
-		 showService.updateShow(show);
+	 public ResponseEntity<?> updateShow(@RequestBody Show show) throws ShowNotFoundException {
+		 return new ResponseEntity<>(showService.updateShow(show), HttpStatus.OK);
 		 
 	 }
 	 
 	 @DeleteMapping(value = "/show/{showId}")
-	 public void deleteShow(@PathVariable(name = "showId") Long showId) {
+	 public ResponseEntity<?> deleteShow(@PathVariable(name = "showId") Long showId) throws ShowNotFoundException {
 		 showService.deleteShow(showId);
+		 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	 }
 	 
 	 @GetMapping(value = "/show/{showId}")
-	 public void getShow(@PathVariable(name = "showId") Long showId) {
-		 showService.getShow(showId);
+	 public ResponseEntity<?> getShow(@PathVariable(name = "showId") Long showId) throws ShowNotFoundException {
+		 return new ResponseEntity<>(showService.getShow(showId), HttpStatus.OK);
 	 }
 	 
 	 @GetMapping(value = "/movie/{movieId}/shows/upcoming/{date}")
-	 public void getUpcomingShowsForMovie(@PathVariable(name = "movieId") Long movieId, 
+	 public ResponseEntity<?> getUpcomingShowsForMovie(@PathVariable(name = "movieId") Long movieId, 
 			 @PathVariable(name = "date") Instant date) {
-		 showService.getUpcomingShowsByMovie(movieId, date);
+		 return new ResponseEntity<>(showService.getUpcomingShowsByMovie(movieId, date), HttpStatus.OK);
 		 
 	 }
 
