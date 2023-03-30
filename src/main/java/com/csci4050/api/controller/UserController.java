@@ -105,9 +105,9 @@ public class UserController {
     }
 
     @PostMapping("/confirmemail")
-    public ResponseEntity<?> confirmEmail(@RequestParam String email) {
-        emailService.confirmEmail(email);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public ResponseEntity<String> confirmEmail(@RequestParam String email) {
+        String code = emailService.confirmEmail(email);
+        return new ResponseEntity<>(code, HttpStatus.OK);
     }
 
 }
