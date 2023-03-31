@@ -80,6 +80,7 @@ public class UserController {
    
     @PostMapping("/user/{username}")
     public ResponseEntity<User> updateUser(@RequestBody User user) throws UserNotFoundException, UserUpdateException {
+        user.setId(userService.getUser(user.getEmail()).getId());
         userService.updateUser(user);
         emailService.updateUser(user.getEmail());
         return new ResponseEntity<User>(userService.updateUser(user), HttpStatus.OK);
