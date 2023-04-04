@@ -25,7 +25,7 @@ public class Theatre {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name ="id")
-	private String id;
+	private Long id;
 	
 	@OneToMany(mappedBy = "theatreId", cascade = CascadeType.ALL)
 	private List<ShowRoom> showRooms;
