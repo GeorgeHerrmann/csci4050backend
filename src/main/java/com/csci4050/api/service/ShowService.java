@@ -59,8 +59,8 @@ public class ShowService {
 	}
 	
 	@Transactional
-	public List<Show> getUpcomingShowsByMovie(Long movieId, Instant date) {
-		return showRepository.getByMovieIdAndShowStartGreaterThan(movieId, Timestamp.from(date));
+	public List<Show> getUpcomingShowsByMovie(Long movieId, Timestamp date) {
+		return showRepository.getByMovieIdAndShowStartGreaterThan(movieId, date);
 	}
 
 }
