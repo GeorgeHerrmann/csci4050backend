@@ -3,6 +3,7 @@ package com.csci4050.api.service;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,13 +21,16 @@ public class ShowService {
 	@Autowired
 	ShowRepository showRepository;
 	
+	Logger logger = Logger.getLogger(this.getClass().getName());
+	
 	@Transactional
 	public Show addShow(Show show) throws ShowCreationException {
-		if (showRepository.existsByShowStartBetweenOrShowEndBetweenAndShowRoomId(
-				show.getShowStart(), show.getShowEnd(), show.getShowStart(), show.getShowEnd(), show.getShowRoom().getId())) {
+		
+		if (!showRepository.findConflictingShows(show.getShowStart(), show.getShowEnd(), show.getShowRoom().getId()).isEmpty()) {
 			throw new ShowCreationException();
 		}
-		return showRepository.save(show);	
+		
+		return show = showRepository.save(show);
 	}
 	
 	@Transactional
@@ -38,13 +42,12 @@ public class ShowService {
 		return showRepository.save(show);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Transactional
 	public Show getShow(Long id) throws ShowNotFoundException {
 		if (!showRepository.existsById(id)) {
 			throw new ShowNotFoundException(id);
 		}
-		return showRepository.getById(id);
+		return showRepository.findById(id).get();
 	}
 	
 	@Transactional

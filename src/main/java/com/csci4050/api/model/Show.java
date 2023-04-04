@@ -11,6 +11,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,7 +21,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @NoArgsConstructor
-@Table(name = "show")
+@Table(name = "movie_show")
 public class Show {
 	
 	@Id
@@ -28,16 +30,18 @@ public class Show {
 	private Long id;
 	
 	@ManyToOne
-	@JoinColumn(name = "movie_id")
+	@JoinColumn(name = "movie_id", referencedColumnName = "id")
 	private Movie movie;
 	
 	@Column(name = "show_start")
+	@Temporal(TemporalType.TIMESTAMP)
 	private Timestamp showStart;
 	
 	@Column(name = "show_end")
 	private Timestamp showEnd;
 	
 	@ManyToOne
+	@Temporal(TemporalType.TIMESTAMP)
 	@JoinColumn(name = "show_room_id", referencedColumnName = "id")
 	private ShowRoom showRoom;
 

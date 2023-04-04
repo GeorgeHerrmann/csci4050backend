@@ -1,5 +1,6 @@
 package com.csci4050.api.model;
 
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -40,6 +41,5 @@ public class Movie {
 	
 	@Column(name = "director")
 	private String director;
-
 	
 }
