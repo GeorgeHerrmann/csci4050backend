@@ -26,7 +26,7 @@ public class ControllerAdvice {
 		return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 	}
 	
-	@ExceptionHandler(value = {UserNotFoundException.class, ShowNotFoundException.class})
+	@ExceptionHandler(value = {UserNotFoundException.class, ShowNotFoundException.class, ShowNotFoundException.class})
 	public ResponseEntity<?> notFound(UserNotFoundException e) {
 		return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
 	}
