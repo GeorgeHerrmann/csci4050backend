@@ -34,6 +34,14 @@ public class TheatreService {
 	}
 	
 	@Transactional
+	public Theatre getTheatre(Long id) throws TheatreNotFoundException {
+		if (!theatreRepository.existsById(id)) {
+			throw new TheatreNotFoundException(id);
+		}
+		return theatreRepository.getById(id);
+	}
+	
+	@Transactional
 	public ShowRoom addShowRoom(ShowRoom showRoom) {
 		return showRoomRepository.save(showRoom);
 	}
