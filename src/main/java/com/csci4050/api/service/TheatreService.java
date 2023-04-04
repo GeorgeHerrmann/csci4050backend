@@ -38,7 +38,7 @@ public class TheatreService {
 		if (!theatreRepository.existsById(id)) {
 			throw new TheatreNotFoundException(id);
 		}
-		return theatreRepository.getById(id);
+		return theatreRepository.findById(id).get();
 	}
 	
 	@Transactional

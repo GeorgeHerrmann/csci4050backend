@@ -86,7 +86,7 @@ public class UserController {
         return new ResponseEntity<User>(userService.updateUser(user), HttpStatus.OK);
     }
     
-    @DeleteMapping("user/{userId}")
+    @DeleteMapping("/user/{userId}")
     public ResponseEntity<?> deleteUser(@PathVariable(value = "userId") Long userId) throws UserNotFoundException {
     	userService.deleteUser(userId);
         return new ResponseEntity<User>(HttpStatus.NO_CONTENT);

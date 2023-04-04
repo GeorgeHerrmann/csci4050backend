@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.csci4050.api.exception.MovieNotFoundException;
 import com.csci4050.api.exception.PaymentException;
 import com.csci4050.api.exception.ShowCreationException;
 import com.csci4050.api.exception.ShowNotFoundException;
@@ -26,7 +27,7 @@ public class ControllerAdvice {
 		return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 	}
 	
-	@ExceptionHandler(value = {UserNotFoundException.class, ShowNotFoundException.class, ShowNotFoundException.class})
+	@ExceptionHandler(value = {UserNotFoundException.class, ShowNotFoundException.class, ShowNotFoundException.class, MovieNotFoundException.class})
 	public ResponseEntity<?> notFound(UserNotFoundException e) {
 		return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
 	}

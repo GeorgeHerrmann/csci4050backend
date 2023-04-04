@@ -19,7 +19,7 @@ import com.csci4050.api.model.Theatre;
 import com.csci4050.api.service.TheatreService;
 
 @RestController
-@RequestMapping(path = {"/api/theatre"}, consumes = {"application/json"})
+@RequestMapping(path = {"/api"}, consumes = {"application/json"})
 @CrossOrigin(origins="*")
 public class TheatreController {
 	
@@ -32,18 +32,18 @@ public class TheatreController {
 		 
 	 }
 	
-	@GetMapping(value = "/{id}")
+	@GetMapping(value = "/theatre/{id}")
 	public ResponseEntity<?> getTheatre(@PathVariable("id") Long theatreId) throws TheatreNotFoundException {
 		return new ResponseEntity<>(theatreService.getTheatre(theatreId), HttpStatus.OK);
 	 }
 	
-	@DeleteMapping(value = "/{theatreId}")
+	@DeleteMapping(value = "/theatre/{theatreId}")
 	public ResponseEntity<?> deleteTheatre(@PathVariable("theatreId") Long theatreId) throws TheatreNotFoundException {
 		theatreService.deleteTheatre(theatreId);
 		 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	 }
 	
-	@PostMapping(value = "/{theatreId}/show-room")
+	@PostMapping(value = "/theatre/{theatreId}/show-room")
 	public ResponseEntity<?> addShowRoom(@RequestBody ShowRoom showRoom) {
 		 return new ResponseEntity<>(theatreService.addShowRoom(showRoom), HttpStatus.CREATED);
 	}
