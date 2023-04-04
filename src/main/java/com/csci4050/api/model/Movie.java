@@ -42,4 +42,11 @@ public class Movie {
 	@Column(name = "director")
 	private String director;
 	
+	@Column(name = "category")
+	private String category;
+	
+	@Column(name = "status")
+	private String status;
+	
+	
 }

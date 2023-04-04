@@ -38,5 +38,21 @@ public class MovieController {
 			@PathVariable("movieId") Long movieId) throws MovieNotFoundException {
 		return new ResponseEntity<>(movieService.updateMovie(movie), HttpStatus.OK);
 	}
+	
+	@GetMapping("/movies/upcoming")
+	public ResponseEntity<?> getUpcomingMovies() {
+		return new ResponseEntity<>(movieService.getAllUpcomingMovies(), HttpStatus.OK);
+	}
+	
+	@GetMapping("/movies/now-playing")
+	public ResponseEntity<?> getNowPlayingMovies() {
+		return new ResponseEntity<>(movieService.getAllMoviesNowPlaying(), HttpStatus.OK);
+	}
+	
+	@GetMapping("/movies/{status}/{category}")
+	public ResponseEntity<?> getNowPlayingMovies(@PathVariable("status") String status, 
+			@PathVariable("category") String category) {
+		return new ResponseEntity<>(movieService.getMoviesByStatusAndCategory(status, category), HttpStatus.OK);
+	}
 
 }
