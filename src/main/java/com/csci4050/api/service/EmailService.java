@@ -23,11 +23,12 @@ public class EmailService {
     javaMailSender.send(msg);
   }
   
-  public void confirmEmail(String email) {
+  public String confirmEmail(String email) {
 	  Random rand = new Random();
       String code = String.format("%04d", rand.nextInt(10000));
       sendEmail(email, "Cine City Email Confirmation",
       "Thanks for registering an account! Please enter the code: " + code + " on the page to create your account.");
+      return code;
   }
   
   public void updatePassword(String email) {

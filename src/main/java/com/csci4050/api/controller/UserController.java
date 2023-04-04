@@ -80,6 +80,7 @@ public class UserController {
    
     @PostMapping("/user/{username}")
     public ResponseEntity<User> updateUser(@RequestBody User user) throws UserNotFoundException, UserUpdateException {
+        user.setId(userService.getUser(user.getEmail()).getId());
         userService.updateUser(user);
         emailService.updateUser(user.getEmail());
         return new ResponseEntity<User>(userService.updateUser(user), HttpStatus.OK);
@@ -105,9 +106,9 @@ public class UserController {
     }
 
     @PostMapping("/confirmemail")
-    public ResponseEntity<?> confirmEmail(@RequestParam String email) {
-        emailService.confirmEmail(email);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public ResponseEntity<String> confirmEmail(@RequestParam String email) {
+        String code = emailService.confirmEmail(email);
+        return new ResponseEntity<>(code, HttpStatus.OK);
     }
 
 }
