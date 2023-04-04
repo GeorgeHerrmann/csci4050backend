@@ -26,7 +26,7 @@ public class TheatreController {
 	@Autowired
 	TheatreService theatreService;
 	
-	@PostMapping
+	@PostMapping(value = "/theatre")
 	public ResponseEntity<?> addTheatre(@RequestBody Theatre theatre) throws ShowCreationException {
 		 return new ResponseEntity<>(theatreService.addTheatre(theatre), HttpStatus.CREATED);
 		 
