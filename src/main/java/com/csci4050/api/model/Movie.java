@@ -31,7 +31,7 @@ public class Movie {
 	private String description;
 	
 	@Column(name = "rating")
-	private float rating;
+	private String rating;
 	
 	@Column(name = "poster")
 	private String poster;

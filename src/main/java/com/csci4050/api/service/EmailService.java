@@ -1,11 +1,14 @@
 package com.csci4050.api.service;
 
+import java.util.List;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+
+import com.csci4050.api.model.User;
 
 @Service
 public class EmailService {
@@ -43,5 +46,13 @@ public class EmailService {
   
   public void updateUser(String email) {
 	  sendEmail(email, "Cine City Account Update", "Your account has been updated, if you did not make this change please contact us immediately.");
+  }
+
+  public void sendPromotion(String code, List<User> users) {
+    for (User user : users) {
+      if (Boolean.TRUE.equals(user.getRecievePromotions())) {
+        sendEmail(user.getEmail(), "Cine City Promotion", "You have been sent a promotion, please enter the code: " + code + " on the page to redeem your promotion.");
+      }
+    }
   }
 }

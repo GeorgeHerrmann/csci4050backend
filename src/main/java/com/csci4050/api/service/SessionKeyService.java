@@ -73,7 +73,6 @@ public class SessionKeyService {
             verifier.verify(token);
             return true;
         } catch (JWTVerificationException exception) {
-            exception.printStackTrace();
             return false;
         }
     }

@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.csci4050.api.exception.PromotionNotFoundException;
 import com.csci4050.api.model.Promotion;
+import com.csci4050.api.service.EmailService;
 import com.csci4050.api.service.PromotionService;
+import com.csci4050.api.service.UserService;
 
 @RestController
 @RequestMapping( consumes = {"application/json"})
@@ -21,9 +23,16 @@ public class PromotionController {
 	
 	@Autowired
 	PromotionService promotionService;
+
+	@Autowired
+	UserService userService;
+
+	@Autowired
+	EmailService emailService;
 	
 	@PostMapping("/api/promotion")
 	public ResponseEntity<?> createPromotion(@RequestBody Promotion promotion) {
+		emailService.sendPromotion(promotion.getCode(), userService.getAllUsers());
 		return new ResponseEntity<>(promotionService.createPromotion(promotion), HttpStatus.CREATED);
 	}
 	
