@@ -10,8 +10,13 @@ import org.springframework.stereotype.Service;
 
 import com.csci4050.api.exception.ShowCreationException;
 import com.csci4050.api.exception.ShowNotFoundException;
+import com.csci4050.api.model.Seat;
 import com.csci4050.api.model.Show;
+import com.csci4050.api.model.Ticket;
+import com.csci4050.api.repository.SeatRepository;
 import com.csci4050.api.repository.ShowRepository;
+import com.csci4050.api.repository.ShowRoomRepository;
+import com.csci4050.api.repository.TicketRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -20,6 +25,12 @@ public class ShowService {
 	
 	@Autowired
 	ShowRepository showRepository;
+	
+	@Autowired
+	TicketRepository ticketRepository;
+	
+	@Autowired
+	SeatRepository seatRepository;
 	
 	Logger logger = Logger.getLogger(this.getClass().getName());
 	
@@ -62,5 +73,16 @@ public class ShowService {
 	public List<Show> getUpcomingShowsByMovie(Long movieId, Timestamp date) {
 		return showRepository.getByMovieIdAndShowStartGreaterThan(movieId, date);
 	}
+	
+	@Transactional
+	public List<Seat> getAvailableSeats(Long showId) {
+		Show show = showRepository.findById(showId).get();
+		List<Seat> seats = seatRepository.findByShowRoomId(show.getShowRoom().getId());
+		List<Ticket> tickets = ticketRepository.findByShowId(showId);
+		tickets.stream().forEach(t -> seats.removeIf(s -> s.getId() == t.getSeat().getId()));
+		return seats;
+		
+	}
+	
 
 }

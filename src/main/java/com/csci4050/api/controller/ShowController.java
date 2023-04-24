@@ -53,8 +53,13 @@ public class ShowController {
 	 @GetMapping(value = "/movie/{movieId}/shows/upcoming/{date}")
 	 public ResponseEntity<?> getUpcomingShowsForMovie(@PathVariable(name = "movieId") Long movieId, 
 			 @PathVariable(name = "date") String date) {
-		 return new ResponseEntity<>(showService.getUpcomingShowsByMovie(movieId, Timestamp.valueOf(date)), HttpStatus.OK);
-		 
+		 return new ResponseEntity<>(showService.getUpcomingShowsByMovie(movieId, Timestamp.valueOf(date)), HttpStatus.OK); 
+	 }
+	 
+	 @GetMapping(value = "/movie/{movieId}/show/{showId}/seats")
+	 public ResponseEntity<?> getUpcomingShowsForMovie(@PathVariable(name = "movieId") Long movieId, 
+			 @PathVariable(name = "showId") Long showId) {
+		 return new ResponseEntity<>(showService.getAvailableSeats(showId), HttpStatus.OK); 
 	 }
 
 }

@@ -1,11 +1,15 @@
 package com.csci4050.api.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.csci4050.api.exception.TheatreNotFoundException;
+import com.csci4050.api.model.Seat;
 import com.csci4050.api.model.ShowRoom;
 import com.csci4050.api.model.Theatre;
+import com.csci4050.api.repository.SeatRepository;
 import com.csci4050.api.repository.ShowRoomRepository;
 import com.csci4050.api.repository.TheatreRepository;
 
@@ -19,6 +23,9 @@ public class TheatreService {
 	
 	@Autowired
 	private ShowRoomRepository showRoomRepository;
+	
+	@Autowired
+	private SeatRepository seatRepository;
 
 	@Transactional
 	public Theatre addTheatre(Theatre theatre) {
@@ -49,5 +56,10 @@ public class TheatreService {
 	@Transactional
 	public ShowRoom deleteShowRoom(ShowRoom showRoom) {
 		return showRoomRepository.save(showRoom);
+	}
+	
+	@Transactional
+	public List<Seat> addSeats(List<Seat> seats) {
+		return seatRepository.saveAll(seats);
 	}
 }

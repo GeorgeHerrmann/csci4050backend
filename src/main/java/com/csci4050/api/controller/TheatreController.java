@@ -1,5 +1,7 @@
 package com.csci4050.api.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.csci4050.api.exception.ShowCreationException;
 import com.csci4050.api.exception.TheatreNotFoundException;
+import com.csci4050.api.model.Seat;
 import com.csci4050.api.model.ShowRoom;
 import com.csci4050.api.model.Theatre;
 import com.csci4050.api.service.TheatreService;
@@ -46,6 +49,11 @@ public class TheatreController {
 	@PostMapping(value = "/theatre/{theatreId}/show-room")
 	public ResponseEntity<?> addShowRoom(@RequestBody ShowRoom showRoom) {
 		 return new ResponseEntity<>(theatreService.addShowRoom(showRoom), HttpStatus.CREATED);
+	}
+	
+	@PostMapping(value = "/theatre/{theatreId}/show-room/{showRoomId}/seats")
+	public ResponseEntity<?> addSeats(@RequestBody List<Seat> seats) {
+		 return new ResponseEntity<>(theatreService.addSeats(seats), HttpStatus.CREATED);
 	}
 
 }
