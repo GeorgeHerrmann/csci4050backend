@@ -1,0 +1,22 @@
+Our SessionKeyService and EmailService now use the factory and singleton design patterns, respectively, to get instances.
+
+Anywhere we create a SessionKeyService should be changed to use SessionKeyFactory like so:
+    SessionKeyFactory factory = new RSA256SessionKeyFactory();
+    SessionKeyService service = factory.createSessionKeyService();
+
+    This service is primarily used in the UserController, so how the service is created should be changed there, 
+    as well as anywhere else it may be used (I don't think it is anywhere else)
+
+Anywhere we create an EmailService should be changed to use EmailService.getInstance()
+    For example, in most places it probably looks like this:
+    @Autowired
+    EmailService emailService;
+
+    Should be changed to:
+    EmailService emailService = EmailService.getInstance();
+
+    This one is used through multiple places (mostly in the Controllers)
+
+You don't have to change how the services are used at all, just how they are instantiated.
+
+Please commit your changes to the main branch directly once you are done.
