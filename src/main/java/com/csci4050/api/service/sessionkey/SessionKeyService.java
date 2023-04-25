@@ -1,4 +1,4 @@
-package com.csci4050.api.service;
+package com.csci4050.api.service.sessionkey;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -30,7 +30,9 @@ public class SessionKeyService {
      * All session keys to be verified by this service must have been created by this service.
      * 
      * @throws JWTCreationException If the key pair could not be generated.
+     * @deprecated Use {@link #RSA256SessionKeyFactory} instead.
      */
+    @Deprecated
     public SessionKeyService() throws JWTCreationException {
         try {
             KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
@@ -42,6 +44,18 @@ public class SessionKeyService {
         } catch (NoSuchAlgorithmException e) {
             throw new JWTCreationException("Error generating key pairs, invalid configuration", e);
         }
+    }
+
+    /**
+     * Creates a SessionKeyService with the given public and private key pair.
+     * All session keys to be verified by this service must have been created by this service.
+     * 
+     * @param publicKey The public key to use.
+     * @param privateKey The private key to use.
+     */
+    public SessionKeyService(RSAPublicKey publicKey, RSAPrivateKey privateKey) {
+        this.publicKey = publicKey;
+        this.privateKey = privateKey;
     }
 
     /**

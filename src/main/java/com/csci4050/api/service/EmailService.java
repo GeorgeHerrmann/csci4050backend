@@ -14,7 +14,25 @@ import com.csci4050.api.model.User;
 public class EmailService {
 
   @Autowired
-  private JavaMailSender javaMailSender;
+  private static JavaMailSender javaMailSender;
+
+  private static EmailService instance = null;
+
+  private EmailService() {
+    if (instance != null) {
+      throw new IllegalStateException("Singleton instance already created.");
+    }
+  }
+
+  /*
+   * Anywhere we use an EmailService should now use EmailService.getInstance() to get the singleton instance.
+   */
+  public static synchronized EmailService getInstance() {
+    if (instance == null) {
+        instance = new EmailService();
+    }
+    return instance;
+}
 
   public void sendEmail(String to, String subject, String body) {
     SimpleMailMessage msg = new SimpleMailMessage();
