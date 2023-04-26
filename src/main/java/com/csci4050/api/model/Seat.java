@@ -31,7 +31,6 @@ public class Seat {
 	@Column(name = "seat_number")
 	String seatNumber;
 	
-	@JsonIgnore
 	@Column(name = "show_room_id")
 	Long showRoomId;
 

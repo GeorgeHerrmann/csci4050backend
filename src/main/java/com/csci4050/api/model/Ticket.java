@@ -35,7 +35,6 @@ public class Ticket {
 	Float price;
 	
 	@Column(name = "show_id")
-	@JsonIgnore
 	Long showId;
 	
 	@ManyToOne

@@ -39,7 +39,14 @@ public class OrderService {
 		order.setSubtotal(calculateSubTotal(order));
 		order.setTotal(calculateTotal(order));
 		order.setCreated(Timestamp.from(Instant.now()));
-		return orderRepository.save(order);
+		List<Ticket> tickets = order.getTickets();
+		order = orderRepository.save(order);
+		
+		for (Ticket ticket: tickets) {
+			ticket.setOrderId(order.getId());
+		}
+		order.setTickets(ticketRepository.saveAll(tickets));
+		return order;
 	}
 	
 	@Transactional
