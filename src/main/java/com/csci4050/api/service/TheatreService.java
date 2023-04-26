@@ -1,6 +1,7 @@
 package com.csci4050.api.service;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,8 @@ public class TheatreService {
 	
 	@Autowired
 	private SeatRepository seatRepository;
+	
+	Logger logger = Logger.getLogger(this.getClass().toString());
 
 	@Transactional
 	public Theatre addTheatre(Theatre theatre) {
@@ -60,6 +63,9 @@ public class TheatreService {
 	
 	@Transactional
 	public List<Seat> addSeats(List<Seat> seats) {
+		for (Seat seat : seats) {
+			logger.info("Show room id: " + seat.getShowRoomId());
+		}
 		return seatRepository.saveAll(seats);
 	}
 }
