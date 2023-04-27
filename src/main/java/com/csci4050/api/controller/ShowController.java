@@ -1,7 +1,6 @@
 package com.csci4050.api.controller;
 
 import java.sql.Timestamp;
-import java.time.Instant;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -53,8 +52,13 @@ public class ShowController {
 	 @GetMapping(value = "/movie/{movieId}/shows/upcoming/{date}")
 	 public ResponseEntity<?> getUpcomingShowsForMovie(@PathVariable(name = "movieId") Long movieId, 
 			 @PathVariable(name = "date") String date) {
-		 return new ResponseEntity<>(showService.getUpcomingShowsByMovie(movieId, Timestamp.valueOf(date)), HttpStatus.OK);
-		 
+		 return new ResponseEntity<>(showService.getUpcomingShowsByMovie(movieId, Timestamp.valueOf(date)), HttpStatus.OK); 
+	 }
+	 
+	 @GetMapping(value = "/movie/{movieId}/show/{showId}/seats")
+	 public ResponseEntity<?> getUpcomingShowsForMovie(@PathVariable(name = "movieId") Long movieId, 
+			 @PathVariable(name = "showId") Long showId) {
+		 return new ResponseEntity<>(showService.getAvailableSeats(showId), HttpStatus.OK); 
 	 }
 
 }

@@ -1,14 +1,13 @@
 package com.csci4050.api.model;
 
-import java.util.List;
 
-import jakarta.persistence.CascadeType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,20 +17,21 @@ import lombok.Setter;
 @Setter
 @Entity
 @NoArgsConstructor
-@Table(name = "show_room")
-public class ShowRoom {
-
+@Table(name = "seat")
+public class Seat {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name ="id")
+	@Column(name = "id", updatable = false)
 	private Long id;
 	
-	@Column(name = "name")
-	private String name;
+	@Column(name = "seat_row")
+	String row;
 	
-	@Column(name = "theatre_id")
-	private Long theatreId;
+	@Column(name = "seat_number")
+	String seatNumber;
 	
-	@OneToMany(mappedBy = "showRoomId", cascade = CascadeType.ALL)
-	List<Seat> seats;
+	@Column(name = "show_room_id")
+	Long showRoomId;
+
 }

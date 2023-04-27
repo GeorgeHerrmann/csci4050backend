@@ -38,10 +38,10 @@ public class Show {
 	private Timestamp showStart;
 	
 	@Column(name = "show_end")
+	@Temporal(TemporalType.TIMESTAMP)
 	private Timestamp showEnd;
 	
 	@ManyToOne
-	@Temporal(TemporalType.TIMESTAMP)
 	@JoinColumn(name = "show_room_id", referencedColumnName = "id")
 	private ShowRoom showRoom;
 
