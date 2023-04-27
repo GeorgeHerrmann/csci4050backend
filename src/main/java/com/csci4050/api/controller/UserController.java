@@ -34,6 +34,7 @@ public class UserController {
     DataValidationService dataValidationService = new DataValidationService();
 
     EmailService emailService = EmailService.getInstance();
+    
 	@Autowired
 	UserService userService;
     

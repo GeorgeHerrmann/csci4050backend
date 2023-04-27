@@ -13,15 +13,12 @@ import com.csci4050.api.model.User;
 @Service
 public class EmailService {
 
-  @Autowired
-  private static JavaMailSender javaMailSender;
+  private JavaMailSender javaMailSender = new EmailConfig().javaMailSender();
 
-  private static EmailService instance = null;
+  private static EmailService instance ;
 
   private EmailService() {
-    if (instance != null) {
-      throw new IllegalStateException("Singleton instance already created.");
-    }
+    
   }
 
   /*
@@ -29,7 +26,7 @@ public class EmailService {
    */
   public static synchronized EmailService getInstance() {
     if (instance == null) {
-        instance = new EmailService();
+      instance = new EmailService();
     }
     return instance;
 }
