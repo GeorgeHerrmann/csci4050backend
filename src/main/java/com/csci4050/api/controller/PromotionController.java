@@ -27,8 +27,7 @@ public class PromotionController {
 	@Autowired
 	UserService userService;
 
-	@Autowired
-	EmailService emailService;
+	EmailService emailService = EmailService.getInstance();
 	
 	@PostMapping("/api/promotion")
 	public ResponseEntity<?> createPromotion(@RequestBody Promotion promotion) {

@@ -21,19 +21,19 @@ import com.csci4050.api.model.Password;
 import com.csci4050.api.model.User;
 import com.csci4050.api.service.DataValidationService;
 import com.csci4050.api.service.EmailService;
-import com.csci4050.api.service.SessionKeyService;
 import com.csci4050.api.service.UserService;
+import com.csci4050.api.service.sessionkey.RSA256SessionKeyFactory;
+import com.csci4050.api.service.sessionkey.SessionKeyService;
 
 
 @RestController
 @RequestMapping(path = {"/api"}, consumes = {"application/json"})
 @CrossOrigin(origins="*")
 public class UserController {
-    SessionKeyService keyService = new SessionKeyService();
+    SessionKeyService keyService = new RSA256SessionKeyFactory().createSessionKeyService();
     DataValidationService dataValidationService = new DataValidationService();
 
-    @Autowired
-    EmailService emailService;
+    EmailService emailService = EmailService.getInstance();
 	@Autowired
 	UserService userService;
     
