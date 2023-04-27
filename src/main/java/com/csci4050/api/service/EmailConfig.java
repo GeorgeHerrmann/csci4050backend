@@ -21,8 +21,8 @@ public class EmailConfig {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost("smtp.fastmail.com");
         mailSender.setPort(587);
-        mailSender.setUsername("kartikeysankhdher@fastmail.com");
-        mailSender.setPassword("3fw3vvu324pw7cea");
+        mailSender.setUsername("cinecity@fastmail.com");
+        mailSender.setPassword("p9bjap675td25zc8");
 
         var props = mailSender.getJavaMailProperties();
 

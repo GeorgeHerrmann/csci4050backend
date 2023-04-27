@@ -1,5 +1,7 @@
 package com.csci4050.api.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +28,11 @@ public class PromotionService {
 			throw new PromotionNotFoundException(promotion.getId());
 		}
 		return promotionRepository.save(promotion);
+	}
+
+	@Transactional
+	public List<Promotion> getAllPromotions() {
+		return promotionRepository.findAll();
 	}
 
 }
